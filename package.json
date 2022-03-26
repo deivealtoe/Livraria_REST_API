@@ -1,11 +1,12 @@
 {
-  "name": "Livraria_REST_API",
+  "name": "livraria_rest_api",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "mongoose": "^6.2.8"
   },
   "scripts": {
     "dev": "nodemon ./server.js"
