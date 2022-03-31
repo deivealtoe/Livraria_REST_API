@@ -6,7 +6,7 @@ db.createUser(
   }
 );
 
-db.livraria_alura.livros.insertOne({
+db.livros.insertOne({
   id: 1,
   titulo: "Senhor dos Anéis",
   autor: "Tolkien",

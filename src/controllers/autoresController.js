@@ -1,0 +1,68 @@
+import autores from '../models/Autor.js'
+
+class AutorController {
+  static listarAutores = (request, response) => {
+    autores.find((err, autores) => {
+      response.status(200)
+      response.json(autores)
+    })
+  }
+
+  static apresentarAutor = (request, response) => {
+    const id = request.params.id
+
+    autores.findById(id, (err, autores) => {
+      if (err) {
+        response.status(400)
+        response.send({ message: `${err.message} - Falha ao buscar pelo autor indicado` })
+      } else {
+        response.status(200)
+        response.send(autores)
+      }
+    })
+  }
+
+  static cadastrarAutor = (request, response) => {
+    let novoAutor = new autores(request.body)
+  
+    novoAutor.save((err) => {
+      if (err) {
+        response.status(500)
+        response.send({ message: `${err.message} - Falha ao cadastrar autor` })
+      } else {
+        response.status(201)
+        response.send(novoAutor.toJSON())
+      }
+    })
+  }
+
+  static atualizarAutor = (request, response) => {
+    const id = request.params.id
+
+    autores.findByIdAndUpdate(id, { $set: request.body }, (err) => {
+      if (err) {
+        response.status(500)
+        response.send({ message: `${err.message} - Falha ao atualizar o autor especificado` })
+      } else {
+        response.status(200)
+        response.send({ message: 'Autor atualizado com sucesso' })
+      }
+    })
+  }
+
+  static deletarAutor = (request, response) => {
+    const { idAutor } = request.params
+
+    autores.findByIdAndDelete(idAutor, (err) => {
+      if (err) {
+        response.status(500)
+        response.send(`${err.message} - Falha ao deletar autor informado`)
+      } else {
+        response.status(200)
+        response.send({ message: 'Autor deletado' })
+      }
+    })
+  }
+}
+
+export default AutorController
