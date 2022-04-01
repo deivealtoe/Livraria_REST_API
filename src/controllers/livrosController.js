@@ -4,6 +4,7 @@ class LivroController {
   static listarLivros = (request, response) => {
     livros.find()
       .populate('autor')
+      .populate('editora')
       .exec((err, livros) => {
         response.status(200)
         response.json(livros)
@@ -15,6 +16,7 @@ class LivroController {
 
     livros.findById(id)
       .populate('autor', 'nome')
+      .populate('editora', 'nome')
       .exec((err, livros) => {
         if (err) {
           response.status(400)
