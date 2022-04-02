@@ -28,6 +28,20 @@ class LivroController {
       })
   }
 
+  static listarLivrosPorEditora = (request, response) => {
+    const editora = request.query.editora
+
+    livros.find({ 'editora': editora }, { }, (err, livros) => {
+      if (err) {
+        response.status(500)
+        response.send({ message: `${err.message} - Falha ao buscar livros por editora` })
+      } else {
+        response.status(200)
+        response.send(livros)
+      }
+    })
+  }
+
   static cadastrarLivro = (request, response) => {
     let novoLivro = new livros(request.body)
   
