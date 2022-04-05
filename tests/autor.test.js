@@ -12,6 +12,12 @@ const deletarAutorPorId = async (_id) => {
   return resposta
 }
 
+const alterarAutorPorId = async (_id, autor) => {
+  const resposta = await axios.put(`http://127.0.0.1:3000/autores/${_id}`, autor)
+
+  return resposta
+}
+
 const pegarTodosOsAutores = async () => {
   const resposta = await axios.get('http://127.0.0.1:3000/autores')
 
@@ -39,14 +45,49 @@ it('Deve cadastrar um novo autor corretamente e posteriormente deletá-lo', asyn
 })
 
 it('Deve cadastrar um novo autor, alterar o nome e deletá-lo', async () => {
-  const autor = { nome: "Autor Jest 002", nacionalidade: "Nacionalidade 002 Jest" }
-  const respostaDoCadastro = await cadastrarAutorERetornarOsDados(autor)
+  const novoAutor = { 
+    nome: "Autor Jest 002",
+    nacionalidade: "Nacionalidade 002 Jest"
+  }
+
+  const respostaDoCadastro = await cadastrarAutorERetornarOsDados(novoAutor)
 
   expect(respostaDoCadastro.status).toBe(201)
-  expect(respostaDoCadastro.data.nome).toBe(autor.nome)
-  expect(respostaDoCadastro.data.nacionalidade).toBe(autor.nacionalidade)
+  expect(respostaDoCadastro.data.nome).toBe(novoAutor.nome)
+  expect(respostaDoCadastro.data.nacionalidade).toBe(novoAutor.nacionalidade)
 
-  const respostaDaAlteracao = await axios.put(`http://127.0.0.1:3000/autores/${respostaDoCadastro.data._id}`, { nome: "Novo Autor Jest" })
+  const autorAlterado = {
+    nome: "Novo Autor Jest"
+  }
+  
+  const respostaDaAlteracao = await alterarAutorPorId(respostaDoCadastro.data._id, autorAlterado)
+
+  expect(respostaDaAlteracao.status).toBe(200)
+  expect(respostaDaAlteracao.data.message).toBe('Autor atualizado com sucesso')
+
+  const respostaDoDelete = await deletarAutorPorId(respostaDoCadastro.data._id)
+
+  expect(respostaDoDelete.status).toBe(200)
+  expect(respostaDoDelete.data.message).toBe('Autor deletado')
+})
+
+it('Deve cadastrar um novo autor, alterar nacionalidade e ser deletado', async () => {
+  const novoAutor = {
+    nome: "Novo Autor 003",
+    nacionalidade: "Nacionalidade XPTO"
+  }
+
+  const respostaDoCadastro = await cadastrarAutorERetornarOsDados(novoAutor)
+
+  expect(respostaDoCadastro.status).toBe(201)
+  expect(respostaDoCadastro.data.nome).toBe(novoAutor.nome)
+  expect(respostaDoCadastro.data.nacionalidade).toBe(novoAutor.nacionalidade)
+
+  const autorAlterado = {
+    nacionalidade: "Nova Nacionalidade"
+  }
+
+  const respostaDaAlteracao = await alterarAutorPorId(respostaDoCadastro.data._id, autorAlterado)
 
   expect(respostaDaAlteracao.status).toBe(200)
   expect(respostaDaAlteracao.data.message).toBe('Autor atualizado com sucesso')
