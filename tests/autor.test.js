@@ -24,6 +24,12 @@ const pegarTodosOsAutores = async () => {
   return resposta
 }
 
+const buscarAutorPorId = async (_id) => {
+  const resposta = await axios.get(`http://127.0.0.1:3000/autores/${_id}`)
+
+  return resposta
+}
+
 it('Deve retornar um array de autores', async () => {
   const resposta = await pegarTodosOsAutores()
 
@@ -96,4 +102,43 @@ it('Deve cadastrar um novo autor, alterar nacionalidade e ser deletado', async (
 
   expect(respostaDoDelete.status).toBe(200)
   expect(respostaDoDelete.data.message).toBe('Autor deletado')
+})
+
+// it('Deve retornar status 404 e mensagem informando que autor não foi encontrado', async () => {
+//   const idInexistente = '624853eecab2afdac4d78361'
+
+//   const respostaAutorBuscado = {}
+
+//   try {
+//     respostaAutorBuscado = await buscarAutorPorId(idInexistente)
+//   } catch (err) {
+
+//   }
+
+//   expect(respostaAutorBuscado.status).toBe(404)
+//   expect(respostaAutorBuscado.data.message).toBe('Autor não encontrado')
+// })
+
+it('Deve cadastrar autor corretamente, buscar por ID e retornar status 200 juntamente com as informações', async () => {
+  const novoAutor = {
+    nome: "Novo nome",
+    nacionalidade: "Nacionalidade ABCD"
+  }
+
+  const respostaCadastro = await cadastrarAutorERetornarOsDados(novoAutor)
+
+  expect(respostaCadastro.status).toBe(201)
+  expect(respostaCadastro.data.nome).toBe(novoAutor.nome)
+  expect(respostaCadastro.data.nacionalidade).toBe(novoAutor.nacionalidade)
+
+  const respostaBuscaAutorPorId = await buscarAutorPorId(respostaCadastro.data._id)
+
+  expect(respostaBuscaAutorPorId.status).toBe(200)
+  expect(respostaBuscaAutorPorId.data.nome).toBe(novoAutor.nome)
+  expect(respostaBuscaAutorPorId.data.nacionalidade).toBe(novoAutor.nacionalidade)
+
+  const respostaDelecao = await deletarAutorPorId(respostaCadastro.data._id)
+
+  expect(respostaDelecao.status).toBe(200)
+  expect(respostaDelecao.data.message).toBe('Autor deletado')
 })

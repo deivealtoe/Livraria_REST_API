@@ -11,13 +11,16 @@ class AutorController {
   static apresentarAutor = (request, response) => {
     const id = request.params.id
 
-    autores.findById(id, (err, autores) => {
+    autores.findById(id, (err, autor) => {
       if (err) {
         response.status(400)
         response.send({ message: `${err.message} - Falha ao buscar pelo autor indicado` })
+      } else if (autor === null) {
+        response.status(404)
+        response.send({ message: 'Autor não encontrado' })
       } else {
         response.status(200)
-        response.send(autores)
+        response.send(autor)
       }
     })
   }
