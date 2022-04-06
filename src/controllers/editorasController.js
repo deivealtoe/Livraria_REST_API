@@ -11,13 +11,16 @@ class EditoraController {
   static apresentarEditora = (request, response) => {
     const id = request.params.id
 
-    editoras.findById(id, (err, editoras) => {
+    editoras.findById(id, (err, editora) => {
       if (err) {
         response.status(400)
         response.send({ message: `${err.message} - Falha ao buscar editora indicada` })
+      } else if (editora === null) {
+        response.status(404)
+        response.send({ message: 'Editora não encontrada' })
       } else {
         response.status(200)
-        response.send(editoras)
+        response.send(editora)
       }
     })
   }

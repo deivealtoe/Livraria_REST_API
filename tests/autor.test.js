@@ -104,21 +104,6 @@ it('Deve cadastrar um novo autor, alterar nacionalidade e ser deletado', async (
   expect(respostaDoDelete.data.message).toBe('Autor deletado')
 })
 
-// it('Deve retornar status 404 e mensagem informando que autor não foi encontrado', async () => {
-//   const idInexistente = '624853eecab2afdac4d78361'
-
-//   const respostaAutorBuscado = {}
-
-//   try {
-//     respostaAutorBuscado = await buscarAutorPorId(idInexistente)
-//   } catch (err) {
-
-//   }
-
-//   expect(respostaAutorBuscado.status).toBe(404)
-//   expect(respostaAutorBuscado.data.message).toBe('Autor não encontrado')
-// })
-
 it('Deve cadastrar autor corretamente, buscar por ID e retornar status 200 juntamente com as informações', async () => {
   const novoAutor = {
     nome: "Novo nome",
