@@ -3,8 +3,13 @@ import editoras from '../models/Editora.js'
 class EditoraController {
   static listarEditoras = (request, response) => {
     editoras.find((err, editoras) => {
-      response.status(200)
-      response.json(editoras)
+      if (err) {
+        response.status(500)
+        response.send({ message: `${err.message} - Falha ao buscar listagem de editoras` })
+      } else {
+        response.status(200)
+        response.json(editoras)
+      }
     })
   }
 
