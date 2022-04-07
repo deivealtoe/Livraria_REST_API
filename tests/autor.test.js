@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const cadastrarAutorERetornarOsDados = async (autor) => {
-  const resposta = await axios.post('http://127.0.0.1:3000/autores', autor)
+  const resposta = await axios.post('http://127.0.0.1:3000/autores', autor, { validateStatus: () => true })
 
   return resposta
 }
@@ -135,4 +135,14 @@ it('Deve cadastrar autor corretamente, buscar por ID e retornar status 200 junta
 
   expect(respostaDelecao.status).toBe(200)
   expect(respostaDelecao.data.message).toBe('Autor deletado')
+})
+
+it('Deve retornar status 500 ao cadastrar autor inválido (sem nome)', async () => {
+  const novoAutor = {
+    "nacionalidade": "Novo Autor sem Nome"
+  }
+
+  const respostaCadastro = await cadastrarAutorERetornarOsDados(novoAutor)
+
+  expect(respostaCadastro.status).toBe(500)
 })

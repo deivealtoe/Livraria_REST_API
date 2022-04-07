@@ -3,8 +3,13 @@ import autores from '../models/Autor.js'
 class AutorController {
   static listarAutores = (request, response) => {
     autores.find((err, autores) => {
-      response.status(200)
-      response.json(autores)
+      if (err) {
+        response.status(500)
+        response.json({ message: `${err.message} - Falha ao buscar listagem de autores` })
+      } else {
+        response.status(200)
+        response.json(autores)
+      }
     })
   }
 
@@ -27,7 +32,7 @@ class AutorController {
 
   static cadastrarAutor = (request, response) => {
     let novoAutor = new autores(request.body)
-  
+
     novoAutor.save((err) => {
       if (err) {
         response.status(500)
